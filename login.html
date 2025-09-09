@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - Smart Finance Manager</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #43cea2, #185a9d);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-box {
+      background: rgba(255,255,255,0.1);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+      width: 350px;
+      text-align: center;
+    }
+
+    .login-box h2 {
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+    }
+
+    .login-box input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 10px;
+      outline: none;
+      font-size: 1rem;
+    }
+
+    .login-box button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      background: #ff7f50;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: bold;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .login-box button:hover {
+      background: #ff5722;
+    }
+
+    .login-box p {
+      margin-top: 15px;
+    }
+
+    .login-box a {
+      color: #ffd700;
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .forgot {
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h2>Welcome Back 👋</h2>
+    <input type="email" id="email" placeholder="Email Address" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button onclick="login()">Login</button>
+    <p class="forgot"><a onclick="forgotPassword()">Forgot Password?</a></p>
+    <p>Don’t have an account? <a href="signup.html">Sign Up</a></p>
+  </div>
+
+  <script>
+    function login() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      const storedEmail = localStorage.getItem("userEmail");
+      const storedPassword = localStorage.getItem("userPassword");
+
+      if (email === storedEmail && password === storedPassword) {
+        alert("Login successful! Redirecting to dashboard...");
+        localStorage.setItem("loggedInUser", localStorage.getItem("userName"));
+        window.location.href = "dashboard.html";
+      } else {
+        alert("Invalid credentials. Please try again.");
+      }
+    }
+
+    function forgotPassword() {
+      const storedEmail = localStorage.getItem("userEmail");
+      const storedPassword = localStorage.getItem("userPassword");
+
+      const enteredEmail = prompt("Enter your registered email:");
+
+      if (enteredEmail === storedEmail) {
+        alert("Your password is: " + storedPassword);
+      } else {
+        alert("Email not found. Please sign up first.");
+      }
+    }
+  </script>
+</body>
+</html>
