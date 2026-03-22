@@ -1,128 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Dashboard - Smart Finance Manager</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: #fff;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    header {
-      background: rgba(0, 0, 0, 0.3);
-      padding: 15px 25px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 1.1rem;
-      font-weight: 500;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    }
-
-    .user-info {
-      font-size: 1rem;
-      font-weight: bold;
-      color: #ffdd57;
-    }
-
-    .logout-btn {
-      background: #ff4757;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 10px;
-      color: #fff;
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.3s;
-    }
-    .logout-btn:hover {
-      background: #e84118;
-      transform: scale(1.05);
-    }
-
-    .dashboard-content {
-      flex: 1;
-      padding: 40px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-    }
-
-    .welcome {
-      font-size: 2rem;
-      margin-bottom: 30px;
-      text-align: center;
-    }
-
-    .card {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 25px;
-      border-radius: 15px;
-      width: 80%;
-      max-width: 600px;
-      margin-bottom: 20px;
-      text-align: center;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-      transition: transform 0.3s;
-    }
-    .card:hover {
-      transform: translateY(-5px);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Smart Finance Manager</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    <nav class="glass">
+        <div class="logo">
+            <span>💰</span> Smart Finance
+        </div>
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <span id="userGreeting" style="font-weight: 600;">Welcome, User</span>
+            <button class="btn" style="padding: 8px 16px; font-size: 0.8rem;" onclick="logout()">Logout</button>
+        </div>
+    </nav>
 
-  <header>
-    <div>📊 Smart Finance Manager</div>
-    <div class="user-info" id="userInfo">Welcome!</div>
-    <button class="logout-btn" onclick="logout()">Logout</button>
-  </header>
+    <main class="dashboard-main">
+        <div class="grid-stats">
+            <div class="stat-card glass">
+                <div class="label">Total Balance</div>
+                <div class="value" id="totalBalance">₹0.00</div>
+            </div>
+            <div class="stat-card glass">
+                <div class="label">Total Income</div>
+                <div class="value text-success" id="totalIncome">₹0.00</div>
+            </div>
+            <div class="stat-card glass">
+                <div class="label">Total Expenses</div>
+                <div class="value text-danger" id="totalExpenses">₹0.00</div>
+            </div>
+        </div>
 
-  <div class="dashboard-content">
-    <h2 class="welcome">Welcome to your Dashboard 🎉</h2>
+        <div class="grid-charts">
+            <div class="chart-card glass">
+                <h3>Monthly Trend</h3>
+                <canvas id="trendChart"></canvas>
+            </div>
+            <div class="chart-card glass">
+                <h3>Expense Breakdown</h3>
+                <canvas id="categoryChart"></canvas>
+            </div>
+        </div>
 
-    <div class="card">
-      <h3>💰 Track Expenses</h3>
-      <p>Log your daily expenses and analyze spending habits.</p>
-    </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 40px;">
+            <!-- Add Transaction -->
+            <div class="glass" style="padding: 30px;">
+                <h3>Add Transaction</h3>
+                <form id="transactionForm" style="margin-top: 20px;">
+                    <div class="form-group">
+                        <label>Type</label>
+                        <select id="tType" style="width: 100%; padding: 12px; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 12px; color: white;">
+                            <option value="income">Income</option>
+                            <option value="expense">Expense</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Amount (₹)</label>
+                        <input type="number" id="tAmount" placeholder="0.00" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category / Source</label>
+                        <input type="text" id="tCategory" placeholder="e.g. Salary, Rent, Food" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" id="tDate" required>
+                    </div>
+                    <button type="submit" class="btn">Add Transaction</button>
+                </form>
+            </div>
 
-    <div class="card">
-      <h3>📈 Budget Planning</h3>
-      <p>Set monthly budgets and track your savings goals.</p>
-    </div>
+            <!-- Set Budget -->
+            <div class="glass" style="padding: 30px;">
+                <h3>Set Monthly Budget</h3>
+                <form id="budgetForm" style="margin-top: 20px;">
+                    <div class="form-group">
+                        <label>Category</label>
+                        <input type="text" id="bCategory" placeholder="e.g. Food" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Budget Amount (₹)</label>
+                        <input type="number" id="bAmount" placeholder="0.00" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Month</label>
+                        <input type="month" id="bMonth" required>
+                    </div>
+                    <button type="submit" class="btn" style="background: linear-gradient(to right, var(--accent), #d97706);">Set Budget</button>
+                </form>
+            </div>
+        </div>
 
-    <div class="card">
-      <h3>📊 Reports</h3>
-      <p>View detailed reports with charts and insights.</p>
-    </div>
-  </div>
+        <div class="table-card glass">
+            <h3>Recent Activity</h3>
+            <div id="recentActivity">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Category</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="activityBody">
+                        <!-- Data injected by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div style="margin-top: 40px; text-align: center;">
+             <button class="btn" id="runMlBtn" style="max-width:300px;">🤖 Run AI Insights</button>
+        </div>
+        
+        <div id="mlResults" class="glass" style="margin-top: 20px; padding: 30px; display: none;">
+            <h3>AI Financial Insights</h3>
+            <div id="mlContent" style="color: var(--text-muted); margin-top: 10px;"></div>
+        </div>
+    </main>
 
-  <script>
-    // ✅ Get user info from localStorage
-    const userName = localStorage.getItem("userName");
-
-    if (!userName) {
-      // If not logged in, redirect to login
-      window.location.href = "login.html";
-    } else {
-      document.getElementById("userInfo").textContent = "👋 " + userName;
-      document.querySelector(".welcome").textContent =
-        "Welcome back, " + userName + " 🎉";
-    }
-
-    // ✅ Logout function
-    function logout() {
-      localStorage.clear(); // clear all data
-      window.location.href = "login.html";
-    }
-  </script>
-
+    <script src="script.js"></script>
 </body>
 </html>
